@@ -26,5 +26,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<AMRHub>("/amr-hub");
+app.MapHub<RoboticArmHub>("/robotic-arm-hub");
 
 app.Run();

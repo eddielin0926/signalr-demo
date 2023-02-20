@@ -6,20 +6,26 @@ import websockets
 import requests
 import json
 import logging
+import time
+import random
 
-logging.basicConfig(level=logging.INFO, format='[%(levelname)s]\t%(message)s')
+logging.basicConfig(level=logging.INFO, format="[%(levelname)s]\t%(message)s")
 
-host = "localhost"
+host = "20.229.66.239"
+# host = "127.0.0.1"
 port = "5213"
-negotiation = requests.post(f'http://{host}:{port}/amr-hub/negotiate?negotiateVersion=0').json()
+hub = "amr-hub"
+
+negotiation = requests.post(
+    f"http://{host}:{port}/{hub}/negotiate?negotiateVersion=0"
+).json()
 
 def toSignalRMessage(data):
-    return f'{json.dumps(data)}\u001e'
+    return f"{json.dumps(data)}\u001e"
 
 async def connectToHub(connectionId):
-    uri = f"ws://{host}:{port}/amr-hub?id={connectionId}"
+    uri = f"ws://{host}:{port}/{hub}?id={connectionId}"
     async with websockets.connect(uri) as websocket:
-        
         # https://github.com/dotnet/aspnetcore/blob/main/src/SignalR/docs/specs/HubProtocol.md#overview
         async def handshake():
             await websocket.send(toSignalRMessage({"protocol": "json", "version": 1}))
@@ -38,24 +44,28 @@ async def connectToHub(connectionId):
                 logging.info(f"receive: {recv}")
 
         await handshake()
-        
+
         _running = True
-        ping_task  = asyncio.create_task(ping())
+        ping_task = asyncio.create_task(ping())
         listen_task = asyncio.create_task(listen())
 
-        # Sending data
-        for i in range(5):
+        while _running:
             message = {
                 "type": 1,
-                "target": "SendMessage",
-                "arguments": [ f"test data {i}" ]
+                "target": "SendPosition",
+                "arguments": [
+                    "amr1",  # id
+                    f"{time.time()}",  # timestamp
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # x
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # y
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # z
+                ],
             }
             await websocket.send(toSignalRMessage(message))
-            await asyncio.sleep(5)
+            await asyncio.sleep(1)
 
-        _running = False
         await ping_task
         await listen_task
 
 logging.info(f"connection id: {negotiation['connectionId']}")
-asyncio.run(connectToHub(negotiation['connectionId']))
+asyncio.run(connectToHub(negotiation["connectionId"]))
