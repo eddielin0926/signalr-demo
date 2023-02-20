@@ -9,13 +9,15 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s]\t%(message)s')
 
-negotiation = requests.post('http://localhost:5213/amr-hub/negotiate?negotiateVersion=0').json()
+host = "localhost"
+port = "5213"
+negotiation = requests.post(f'http://{host}:{port}/amr-hub/negotiate?negotiateVersion=0').json()
 
 def toSignalRMessage(data):
     return f'{json.dumps(data)}\u001e'
 
 async def connectToHub(connectionId):
-    uri = f"ws://localhost:5213/amr-hub?id={connectionId}"
+    uri = f"ws://{host}:{port}/amr-hub?id={connectionId}"
     async with websockets.connect(uri) as websocket:
         
         # https://github.com/dotnet/aspnetcore/blob/main/src/SignalR/docs/specs/HubProtocol.md#overview
