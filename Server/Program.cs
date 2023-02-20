@@ -7,8 +7,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyAllowAllHeadersPolicy",
         policy =>
         {
-            policy.WithOrigins("*")
-                   .AllowAnyHeader();
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
         });
 });
 
