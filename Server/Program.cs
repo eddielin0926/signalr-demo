@@ -2,6 +2,16 @@ using Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowAllHeadersPolicy",
+        policy =>
+        {
+            policy.WithOrigins("*")
+                   .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
