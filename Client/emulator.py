@@ -11,20 +11,19 @@ import random
 
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s]\t%(message)s")
 
-host = "20.229.66.239"
-# host = "127.0.0.1"
-port = "5213"
-hub = "amr-hub"
+HOST = "127.0.0.1"
+PORT = "5213"
+HUB = "robotic-arm-hub"
 
 negotiation = requests.post(
-    f"http://{host}:{port}/{hub}/negotiate?negotiateVersion=0"
+    f"http://{HOST}:{PORT}/{HUB}/negotiate?negotiateVersion=0"
 ).json()
 
 def toSignalRMessage(data):
     return f"{json.dumps(data)}\u001e"
 
 async def connectToHub(connectionId):
-    uri = f"ws://{host}:{port}/{hub}?id={connectionId}"
+    uri = f"ws://{HOST}:{PORT}/{HUB}?id={connectionId}"
     async with websockets.connect(uri) as websocket:
         # https://github.com/dotnet/aspnetcore/blob/main/src/SignalR/docs/specs/HubProtocol.md#overview
         async def handshake():
@@ -52,17 +51,20 @@ async def connectToHub(connectionId):
         while _running:
             message = {
                 "type": 1,
-                "target": "SendPosition",
+                "target": "SendAngles",
                 "arguments": [
-                    "amr1",  # id
+                    "robotic-arm1",  # id
                     f"{time.time()}",  # timestamp
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # x
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # y
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # z
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang1j
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang2j
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang3j
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang4j
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang5j
+                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang6j
                 ],
             }
             await websocket.send(toSignalRMessage(message))
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.03)
 
         await ping_task
         await listen_task
