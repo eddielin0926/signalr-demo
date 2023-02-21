@@ -8,6 +8,7 @@ import json
 import logging
 import time
 import random
+from requests.adapters import HTTPAdapter, Retry
 
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s]\t%(message)s")
 
@@ -15,8 +16,13 @@ HOST = "127.0.0.1"
 PORT = "5213"
 HUB = "robotic-arm-hub"
 
-negotiation = requests.post(
-    f"http://{HOST}:{PORT}/{HUB}/negotiate?negotiateVersion=0"
+session = requests.Session()
+adapter = HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1))
+session.mount("http://", adapter)
+session.mount("https://", adapter)
+negotiation = session.post(
+    f"http://{HOST}:{PORT}/{HUB}/negotiate?negotiateVersion=0",
+    verify=False
 ).json()
 
 def toSignalRMessage(data):
