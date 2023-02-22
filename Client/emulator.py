@@ -60,13 +60,13 @@ async def connectToHub(connectionId):
                 "target": "SendAngles",
                 "arguments": [
                     "robotic-arm1",  # id
-                    f"{time.time()}",  # timestamp
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang1j
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang2j
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang3j
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang4j
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang5j
-                    f"{round(random.uniform(0.0, 100.0), 6)}",  # ang6j
+                    time.time(),  # timestamp
+                    round(random.uniform(0.0, 100.0), 6),  # ang1j
+                    round(random.uniform(0.0, 100.0), 6),  # ang2j
+                    round(random.uniform(0.0, 100.0), 6),  # ang3j
+                    round(random.uniform(0.0, 100.0), 6),  # ang4j
+                    round(random.uniform(0.0, 100.0), 6),  # ang5j
+                    round(random.uniform(0.0, 100.0), 6),  # ang6j
                 ],
             }
             await websocket.send(toSignalRMessage(message))
