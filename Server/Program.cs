@@ -16,6 +16,7 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+// TODO: https://learn.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-7.0&tabs=dotnet
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -39,7 +40,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapHub<ChatHub>("/chatHub");
-app.MapHub<AMRHub>("/amr-hub");
 app.MapHub<RoboticArmHub>("/robotic-arm-hub");
 
 app.Run();
