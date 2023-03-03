@@ -8,7 +8,7 @@ namespace Server.Hubs
         [JsonPropertyName("id")]
         public string? Id { get; set; }
         [JsonPropertyName("timestamp")]
-        public double? Timestamp { get; set; }
+        public string? Timestamp { get; set; }
         [JsonPropertyName("ang1j")]
         public double? Ang1j { get; set; }
         [JsonPropertyName("ang2j")]
@@ -24,7 +24,7 @@ namespace Server.Hubs
     }
     public class RoboticArmHub : Hub
     {
-        public async Task SendAngles(string id, double timestamp, double ang1j, double ang2j, double ang3j, double ang4j, double ang5j, double ang6j)
+        public async Task SendAngles(string id, string timestamp, double ang1j, double ang2j, double ang3j, double ang4j, double ang5j, double ang6j)
         {
             var message = new RoboticArmMessage
             {
