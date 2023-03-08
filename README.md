@@ -4,55 +4,16 @@
 
 ## Environment
 
-### Server
+- .NET 7.0
+- Python
 
-Install .NET 7.0
+## Start Docker
 
-### Client
-
-Install Pipenv
-
-## Start
-
-### Server
-
-```shell
-cd Server
-dotnet run
+```sh
+docker build -t signalr-server .
+docker run -it --rm -p 7067:7067 -p 5213:5213 signalr-server
 ```
 
-### Client
+## Start Solution
 
-#### Listener
-
-This is just an example. It's not necessary to run this program.
-
-```shell
-cd Client
-pipenv shell
-python amr-client.py
-```
-
-#### Emulator
-
-```shell
-cd Client
-pipenv shell
-python amr-emulator.py
-```
-
-## Develop
-
-Modify the sending data section in `amr-emulator.py`.
-
-```python
-# Sending data
-for i in range(5):
-    message = {
-        "type": 1,
-        "target": "SendMessage",
-        "arguments": [ f"test data {i}" ]
-    }
-    await websocket.send(toSignalRMessage(message))
-    await asyncio.sleep(5)
-```
+Open signalr-demo.sln and press start.

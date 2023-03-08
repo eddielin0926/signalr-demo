@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO, format="[%(levelname)s]\t%(message)s")
 HOST = "127.0.0.1"
 PORT = "5213"
 HUB = "robotic-arm-hub"
+MODES = ["idle", "move patrol", "move dock", "delivery specimen", "delivery expendables"]
 
 session = requests.Session()
 adapter = HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1))
@@ -53,24 +54,16 @@ async def connectToHub(connectionId):
         _running = True
         ping_task = asyncio.create_task(ping())
         listen_task = asyncio.create_task(listen())
-
+        i = 0
         while _running:
             message = {
                 "type": 1,
-                "target": "SendAngles",
-                "arguments": [
-                    "robot1",  # id
-                    str(time.time()),  # timestamp
-                    round(random.uniform(0.0, 100.0), 6),  # ang1j
-                    round(random.uniform(0.0, 100.0), 6),  # ang2j
-                    round(random.uniform(0.0, 100.0), 6),  # ang3j
-                    round(random.uniform(0.0, 100.0), 6),  # ang4j
-                    round(random.uniform(0.0, 100.0), 6),  # ang5j
-                    round(random.uniform(0.0, 100.0), 6),  # ang6j
-                ],
+                "target": "SendNyokkey",
+                "arguments": [ MODES[i] ],
             }
+            i = (i + 1) % len(MODES)
             await websocket.send(toSignalRMessage(message))
-            await asyncio.sleep(0.03)
+            await asyncio.sleep(1)
 
         await ping_task
         await listen_task
