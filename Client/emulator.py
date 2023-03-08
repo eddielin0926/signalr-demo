@@ -26,6 +26,16 @@ negotiation = session.post(
     verify=False
 ).json()
 
+class Message(object):
+    def __init__(self, type, target, arguments):
+        self.type = type
+        self.target = target
+        self.arguments = arguments
+
+    def __str__(self):
+        return "type: {0} ,target: {1}, arguments: {3}".format(self.type, self.target, self.arguments)
+
+
 def toSignalRMessage(data):
     return f"{json.dumps(data)}\u001e"
 
@@ -47,7 +57,8 @@ async def connectToHub(connectionId):
         async def listen():
             while _running:
                 recv = await websocket.recv()
-                logging.info(f"receive: {recv}")
+                if "ReceiveNyokkey" in recv:
+                    logging.info(f"receive: {recv}")
 
         await handshake()
 
