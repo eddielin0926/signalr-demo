@@ -42,7 +42,8 @@ class MyTopics(object):
         rospy.init_node("my_topics", anonymous=True)
 
         negotiation = requests.post(
-            f"http://127.0.0.1:5213/robotic-arm-hub/negotiate?negotiateVersion=0"
+            f"http://127.0.0.1:5213/robotic-arm-hub/negotiate?negotiateVersion=0",
+            verify=False
         ).json()
         connection_id = negotiation["connectionId"]
         rospy.loginfo(f"connection id: {connection_id}")

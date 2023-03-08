@@ -1,6 +1,6 @@
 FROM ros:noetic
 
-RUN apt-get update && apt-get install -y wget python3-pip
+RUN apt-get update && apt-get install -y wget python3-pip libnss3-tools git
 RUN pip install websocket-client requests
 
 RUN wget https://dot.net/v1/dotnet-install.sh
@@ -12,17 +12,18 @@ RUN echo 'export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools' >> ~/.bashrc
 
 COPY ./catkin_ws /catkin_ws
 
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd /catkin_robot; catkin_make'
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd /catkin_ws; catkin_make'
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-RUN echo "source /catkin_robot/devel/setup.bash" >> ~/.bashrc
+RUN echo "source /catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 COPY ./Server /Server
 
-EXPOSE 5213
+COPY ./dotnet-devcert /dotnet-devcert
+RUN dotnet-devcert/create-dotnet-devcert.sh
 
-WORKDIR /catkin_ws
+EXPOSE 5213
 
 COPY ./start.sh .
 RUN chmod +x ./start.sh
 
-ENTRYPOINT [ "./start.sh" ]
+CMD [ "./start.sh" ]

@@ -2,17 +2,18 @@
 
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
-cd /Server
-dotnet run &
 
-cd /catkin_robot
+cd /Server
+dotnet run --launch-profile "https" &
+
+cd /catkin_ws
 source devel/setup.bash
 roscore &
 
 sleep 5
 
-cd /catkin_robot/src/krnx_msgs/scripts
+cd /catkin_ws/src/krnx_msgs/scripts
 python3 listener.py &
 
-cd /catkin_robot
+cd /catkin_ws
 rosbag play -l four_robots.bag
