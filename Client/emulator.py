@@ -60,7 +60,7 @@ async def connectToHub(connectionId):
                 "target": "SendAngles",
                 "arguments": [
                     "robot1",  # id
-                    time.time(),  # timestamp
+                    str(time.time()),  # timestamp
                     round(random.uniform(0.0, 100.0), 6),  # ang1j
                     round(random.uniform(0.0, 100.0), 6),  # ang2j
                     round(random.uniform(0.0, 100.0), 6),  # ang3j
