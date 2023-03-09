@@ -21,9 +21,12 @@ session = requests.Session()
 adapter = HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1))
 session.mount("http://", adapter)
 session.mount("https://", adapter)
+# negotiation = session.post(
+#     f"http://{HOST}:{PORT}/{HUB}/negotiate?negotiateVersion=0",
+#     verify=False
+# ).json()
 negotiation = session.post(
-    f"http://{HOST}:{PORT}/{HUB}/negotiate?negotiateVersion=0",
-    verify=False
+    f"https://khi-signalr-server.azurewebsites.net/{HUB}/negotiate?negotiateVersion=0",
 ).json()
 
 class Message(object):
@@ -40,7 +43,7 @@ def toSignalRMessage(data):
     return f"{json.dumps(data)}\u001e"
 
 async def connectToHub(connectionId):
-    uri = f"ws://{HOST}:{PORT}/{HUB}?id={connectionId}"
+    uri = f"wss://khi-signalr-server.azurewebsites.net/{HUB}?id={connectionId}"
     async with websockets.connect(uri) as websocket:
         # https://github.com/dotnet/aspnetcore/blob/main/src/SignalR/docs/specs/HubProtocol.md#overview
         async def handshake():
@@ -57,24 +60,43 @@ async def connectToHub(connectionId):
         async def listen():
             while _running:
                 recv = await websocket.recv()
-                if "ReceiveNyokkey" in recv:
-                    logging.info(f"receive: {recv}")
+                # if "ReceiveNyokkey" in recv:
+                logging.info(f"receive: {recv}")
 
         await handshake()
 
         _running = True
         ping_task = asyncio.create_task(ping())
         listen_task = asyncio.create_task(listen())
-        i = 0
+
+        # i = 0
+        # while _running:
+        #     message = {
+        #         "type": 1,
+        #         "target": "SendNyokkey",
+        #         "arguments": [ MODES[i] ],
+        #     }
+        #     i = (i + 1) % len(MODES)
+        #     await websocket.send(toSignalRMessage(message))
+        #     await asyncio.sleep(1)
+
         while _running:
             message = {
                 "type": 1,
-                "target": "SendNyokkey",
-                "arguments": [ MODES[i] ],
+                "target": "SendAngles",
+                "arguments": [
+                    "robot1",  # id
+                    str(time.time()),  # timestamp
+                    round(random.uniform(0.0, 100.0), 6),  # ang1j
+                    round(random.uniform(0.0, 100.0), 6),  # ang2j
+                    round(random.uniform(0.0, 100.0), 6),  # ang3j
+                    round(random.uniform(0.0, 100.0), 6),  # ang4j
+                    round(random.uniform(0.0, 100.0), 6),  # ang5j
+                    round(random.uniform(0.0, 100.0), 6),  # ang6j
+                ],
             }
-            i = (i + 1) % len(MODES)
             await websocket.send(toSignalRMessage(message))
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.03)
 
         await ping_task
         await listen_task

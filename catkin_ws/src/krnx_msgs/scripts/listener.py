@@ -42,13 +42,13 @@ class MyTopics(object):
         rospy.init_node("my_topics", anonymous=True)
 
         negotiation = requests.post(
-            f"http://127.0.0.1:5213/robotic-arm-hub/negotiate?negotiateVersion=0",
+            f"https://khi-signalr-server.azurewebsites.net/robotic-arm-hub/negotiate?negotiateVersion=0",
             verify=False
         ).json()
         connection_id = negotiation["connectionId"]
         rospy.loginfo(f"connection id: {connection_id}")
         self.signalr_ws = create_connection(
-            f"ws://127.0.0.1:5213/robotic-arm-hub?id={connection_id}")
+            f"wss://khi-signalr-server.azurewebsites.net/robotic-arm-hub?id={connection_id}")
 
         rospy.loginfo("start ...")
         self.lock = threading.Lock()
