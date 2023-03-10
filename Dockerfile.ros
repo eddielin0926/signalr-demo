@@ -9,7 +9,7 @@ COPY ./${ROS_WS} /${ROS_WS}
 
 WORKDIR ${ROS_WS}
 
-RUN /bin/bash -c '. /ros_entrypoint.sh; catkin_make'
+RUN /ros_entrypoint.sh catkin_make
 
 # source ros package from entrypoint
 RUN sed --in-place --expression \
