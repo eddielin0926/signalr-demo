@@ -16,4 +16,5 @@ RUN sed --in-place --expression \
       '$isource "/catkin_ws/devel/setup.bash"' \
       /ros_entrypoint.sh
 
+ENTRYPOINT [ "/ros_entrypoint.sh" ]
 CMD [ "roslaunch", "krnx_msgs", "replay.launch" ]
