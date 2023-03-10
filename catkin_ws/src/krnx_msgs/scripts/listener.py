@@ -4,7 +4,6 @@ import sys
 import requests
 import json
 import rospy
-# from std_msgs.msg import String
 from krnx_msgs.msg import RobotState
 import threading
 import os

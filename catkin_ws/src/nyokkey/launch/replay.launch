@@ -1,0 +1,4 @@
+<launch>
+  <node name="listener" pkg="nyokkey" type="listener.py" output="screen" />
+  <node name="talker" pkg="rosbag" type="play" output="screen" args="-l /catkin_ws/nyokkey.bag"/>
+</launch>
