@@ -16,7 +16,6 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-// TODO: https://learn.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-7.0&tabs=dotnet
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -29,9 +28,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseCors("CorsPolicy");
-
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -39,7 +36,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
-app.MapHub<ChatHub>("/chatHub");
 app.MapHub<RoboticArmHub>("/robotic-arm-hub");
+app.MapHub<NyokkeyHub>("/nyokkey");
 
 app.Run();

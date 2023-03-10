@@ -1,30 +1,76 @@
 ﻿@page
-    <div class="container">
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-2">User</div>
-            <div class="col-4"><input type="text" id="userInput" /></div>
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container">
+    <!-- <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-5">
+            <input type="text" class="w-100" id="msgInput" placeholder="id, timestamp, ang1j, ang2j, ang3j, ang4j, ang5j, ang6j" />
         </div>
-        <div class="row">
-            <div class="col-2">Message</div>
-            <div class="col-4"><input type="text" id="messageInput" /></div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-6">
-                <input type="button" id="sendButton" value="Send Message" />
-            </div>
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Send Data" />
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <hr />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
+    <div class="w-100">
+        <hr />
+    </div> -->
+
+    <h3>Robotic Arm</h3>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Timestamp</th>
+            <th>Ang1j</th>
+            <th>Ang2j</th>
+            <th>Ang3j</th>
+            <th>Ang4j</th>
+            <th>Ang5j</th>
+            <th>Ang6j</th>
+        </tr>
+        <tr id="robot1">
+            <td>robot1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr id="robot2">
+            <td>robot2</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr id="robot3">
+            <td>robot3</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr id="robot4">
+            <td>robot4</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+</div>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
+<script src="~/js/roboticArm.js"></script>
