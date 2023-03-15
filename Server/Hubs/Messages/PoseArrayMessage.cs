@@ -7,11 +7,6 @@ namespace Server.Hubs.Messages
         [JsonPropertyName("header")]
         public HeaderMessage? Header { get; set; }
         [JsonPropertyName("poses")]
-        public PoseMessage?[] Pose { get; set; }
-        public PoseArrayMessage(HeaderMessage header, PoseMessage[] pose)
-        {
-            Header = header;
-            Pose = pose;
-        }
+        public PoseMessage[]? Pose { get; set; }
     }
 }

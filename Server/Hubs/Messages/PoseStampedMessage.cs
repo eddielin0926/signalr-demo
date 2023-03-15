@@ -8,10 +8,5 @@ namespace Server.Hubs.Messages
         public HeaderMessage? Header { get; set; }
         [JsonPropertyName("pose")]
         public PoseMessage? Pose { get; set; }
-        public PoseStampedMessage(HeaderMessage header, PoseMessage pose)
-        {
-            Header = header;
-            Pose = pose;
-        }
     }
 }

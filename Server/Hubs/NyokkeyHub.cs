@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Server.Hubs.Messages;
+using System.Text.Json.Serialization;
 
 namespace Server.Hubs
 {
