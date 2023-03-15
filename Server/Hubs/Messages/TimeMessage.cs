@@ -5,9 +5,9 @@ namespace Server.Hubs.Messages
     public class TimeMessage
     {
         [JsonPropertyName("sec")]
-        int Sec;
+        public int? Sec { get; set; }
         [JsonPropertyName("nsec")]
-        int Nsec;
+        public int? Nsec { get; set; }
         public TimeMessage(int sec, int nsec)
         {
             Sec = sec;

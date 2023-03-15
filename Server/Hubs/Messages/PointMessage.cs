@@ -5,11 +5,11 @@ namespace Server.Hubs.Messages
     public class PointMessage
     {
         [JsonPropertyName("x")]
-        double X;
+        public double? X { get; set; }
         [JsonPropertyName("y")]
-        double Y;
+        public double? Y { get; set; }
         [JsonPropertyName("z")]
-        double Z;
+        public double? Z { get; set; }
         public PointMessage(double x, double y, double z)
         {
             X = x;

@@ -5,13 +5,13 @@ namespace Server.Hubs.Messages
     public class QuaternionMessage
     {
         [JsonPropertyName("x")]
-        double X;
+        public double? X { get; set; }
         [JsonPropertyName("y")]
-        double Y;
+        public double? Y { get; set; }
         [JsonPropertyName("z")]
-        double Z;
+        public double? Z { get; set; }
         [JsonPropertyName("w")]
-        double W;
+        public double? W { get; set; }
         public QuaternionMessage(double x, double y, double z, double w)
         {
             X = x;

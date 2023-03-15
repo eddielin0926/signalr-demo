@@ -5,7 +5,7 @@ namespace Server.Hubs.Messages
     public class StringMessage
     {
         [JsonPropertyName("data")]
-        public string Data;
+        public string? Data { get; set; }
         public StringMessage(string data)
         {
             Data = data;
