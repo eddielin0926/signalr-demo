@@ -38,18 +38,18 @@ class Watcher:
 
 
 class MyTopics(object):
-    def __init__(self):
+    def __init__(self, domain_name, hub):
         super(MyTopics, self).__init__()
         rospy.init_node("nyokkey_topics", anonymous=True)
 
         negotiation = requests.post(
-            f"http://localhost:5119/nyokkey/negotiate?negotiateVersion=0",
+            f"https://{domain_name}/{hub}/negotiate?negotiateVersion=0",
             verify=False
         ).json()
         connection_id = negotiation["connectionId"]
         rospy.loginfo(f"connection id: {connection_id}")
         self.signalr_ws = create_connection(
-            f"ws://localhost:5119/nyokkey?id={connection_id}")
+            f"wss://{domain_name}/{hub}?id={connection_id}")
 
         rospy.loginfo("start ...")
         self.lock = threading.Lock()
@@ -178,6 +178,8 @@ class MyTopics(object):
 
    
 if __name__ == "__main__":
+    domain_name = os.getenv('DOMAIN_NAME', 'khi-signalr-server.azurewebsites.net')
+    hub = os.getenv('HUB', 'nyokkey')
     Watcher()
-    topics = MyTopics()
+    topics = MyTopics(domain_name, hub)
     topics.start()
