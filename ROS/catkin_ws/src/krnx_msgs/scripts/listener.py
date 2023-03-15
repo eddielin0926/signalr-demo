@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import sys
-import time
 import requests
 import json
 import rospy
@@ -112,8 +111,6 @@ class MyTopics(object):
                     data1.joint_1, data1.joint_2, data1.joint_3, data1.joint_4, data1.joint_5, data1.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
                 rospy.loginfo(f"robot1 send: {msg}")
-                recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
         
         sub = rospy.Subscriber('robot1', RobotState, callback=callback1)
         rospy.spin()
@@ -127,8 +124,6 @@ class MyTopics(object):
                 msg = self._build_message("SendAngles", [data2.id, data2.time, 
                     data2.joint_1, data2.joint_2, data2.joint_3, data2.joint_4, data2.joint_5, data2.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
-                recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
 
         sub = rospy.Subscriber('robot2', RobotState, callback=callback2)
         rospy.spin()
@@ -142,8 +137,6 @@ class MyTopics(object):
                 msg = self._build_message("SendAngles", [data3.id, data3.time, 
                     data3.joint_1, data3.joint_2, data3.joint_3, data3.joint_4, data3.joint_5, data3.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
-                recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
 
         sub = rospy.Subscriber('robot3', RobotState, callback=callback3)
         rospy.spin()
@@ -157,8 +150,6 @@ class MyTopics(object):
                 msg = self._build_message("SendAngles", [data4.id, data4.time, 
                     data4.joint_1, data4.joint_2, data4.joint_3, data4.joint_4, data4.joint_5, data4.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
-                recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
 
         sub = rospy.Subscriber('robot4', RobotState, callback=callback4)
         rospy.spin()
