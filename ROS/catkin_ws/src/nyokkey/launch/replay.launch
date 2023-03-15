@@ -1,4 +1,7 @@
 <launch>
+  <arg name="rate" default="0.25" />
+  <arg name="file" default="/catkin_ws/2023-02-27-19-15-26.bag" />
+
   <node name="listener" pkg="nyokkey" type="listener.py" output="screen" />
-  <node name="talker" pkg="rosbag" type="play" output="screen" args="-l /catkin_ws/2023-02-27-19-15-26.bag"/>
+  <node name="talker" pkg="rosbag" type="play" output="screen" args="-l -r $(arg rate) $(arg file)"/>
 </launch>
