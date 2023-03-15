@@ -102,68 +102,78 @@ class MyTopics(object):
         da.join()
    
     def sub_nyokkey_location(self):
-        def callback1(data1):
-            # rospy.loginfo(f"location receive: {data1.pose.position.x, data1.pose.position.y,data1.pose.position.z, data1.pose.orientation.x, data1.pose.orientation.y, data1.pose.orientation.z, data1.pose.orientation.w}")
-            y = yaml.safe_load(str(data1))
+        def callback(data):
+            y = yaml.safe_load(str(data))
+            rospy.loginfo(f"[ros] [location] receive: {y}")
+
             msg = self._build_message("SendLocation", [y])
             self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"location send: {msg}")
+            rospy.loginfo(f"[signalr] [location] send: {msg}")
+
             recv = self.signalr_ws.recv()
-            rospy.loginfo(f"receive signalr: {recv}")
+            rospy.loginfo(f"[signalr] [location] receive : {recv}")
         
-        sub = rospy.Subscriber('/nyokkey/hmi/location', PoseStamped, callback=callback1)
+        sub = rospy.Subscriber('/nyokkey/hmi/location', PoseStamped, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_rightarm(self):
-        def callback2(data2):
-            # rospy.loginfo(f"robot2 receive: {data2.poses[1].position.x}")  
+        def callback(data):
+            y = yaml.safe_load(str(data))
+            rospy.loginfo(f"[ros] [rightarm] receive: {y}")
 
-            # msg = self._build_message("SendAngles", [data2])
-            # self.signalr_ws.send(self.toSignalRMessage(msg))
-            # recv = self.signalr_ws.recv()
-            # rospy.loginfo(f"receive signalr: {recv}")
-            pass
+            msg = self._build_message("SendRightArm", [y])
+            self.signalr_ws.send(self.toSignalRMessage(msg))
+            rospy.loginfo(f"[signalr] [rightarm] send: {msg}")
 
-        sub = rospy.Subscriber('/nyokkey/hmi/rightarm', PoseArray, callback=callback2)
+            recv = self.signalr_ws.recv()
+            rospy.loginfo(f"[signalr] [rightarm] receive: {recv}")
+
+        sub = rospy.Subscriber('/nyokkey/hmi/rightarm', PoseArray, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_leftarm(self):
-        def callback3(data3):
-            # rospy.loginfo(f"robot3 receive: {data3}") 
+        def callback(data):
+            y = yaml.safe_load(str(data))
+            rospy.loginfo(f"[ros] [leftarm] receive: {y}")
 
-            # msg = self._build_message("SendAngles", [data3])
-            # self.signalr_ws.send(self.toSignalRMessage(msg))
-            # recv = self.signalr_ws.recv()
-            # rospy.loginfo(f"receive signalr: {recv}")
-            pass
+            msg = self._build_message("SendLeftArm", [y])
+            self.signalr_ws.send(self.toSignalRMessage(msg))
+            rospy.loginfo(f"[signalr] [leftarm] send: {msg}")
 
-        sub = rospy.Subscriber('/nyokkey/hmi/leftarm', PoseArray, callback=callback3)
+            recv = self.signalr_ws.recv()
+            rospy.loginfo(f"[signalr] [leftarm] receive: {recv}")
+
+        sub = rospy.Subscriber('/nyokkey/hmi/leftarm', PoseArray, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_face(self):
-        def callback4(data4):
-            # rospy.loginfo(f"robot4 receive: {data4}") 
+        def callback(data):
+            y = yaml.safe_load(str(data))
+            rospy.loginfo(f"[ros] [face] receive: {y}")
 
-            # msg = self._build_message("SendAngles", [data4])
-            # self.signalr_ws.send(self.toSignalRMessage(msg))
-            # recv = self.signalr_ws.recv()
-            # rospy.loginfo(f"receive signalr: {recv}")
-            pass
+            msg = self._build_message("SendFace", [y])
+            self.signalr_ws.send(self.toSignalRMessage(msg))
+            rospy.loginfo(f"[signalr] [face] send: {msg}")
 
-        sub = rospy.Subscriber('/nyokkey/hmi/face', PoseArray, callback=callback4)
+            recv = self.signalr_ws.recv()
+            rospy.loginfo(f"[signalr] [face] receive: {recv}")
+
+        sub = rospy.Subscriber('/nyokkey/hmi/face', PoseArray, callback=callback)
         rospy.spin()
 
     def sub_nyokkey_task(self):
-        def callback4(data5):
-            # rospy.loginfo(f"robot5 receive: {data5}") 
+        def callback(data):
+            y = yaml.safe_load(str(data))
+            rospy.loginfo(f"[ros] [task] receive: {y}")
 
-            # msg = self._build_message("SendAngles", [data5])
-            # self.signalr_ws.send(self.toSignalRMessage(msg))
-            # recv = self.signalr_ws.recv()
-            # rospy.loginfo(f"receive signalr: {recv}")
-            pass
+            msg = self._build_message("SendTask", [y])
+            self.signalr_ws.send(self.toSignalRMessage(msg))
+            rospy.loginfo(f"[signalr] [task] send: {msg}")
 
-        sub = rospy.Subscriber('/nyokkey/hmi/task', String, callback=callback4)
+            recv = self.signalr_ws.recv()
+            rospy.loginfo(f"[signalr] [task] receive: {recv}")
+
+        sub = rospy.Subscriber('/nyokkey/hmi/task', String, callback=callback)
         rospy.spin()
 
    
