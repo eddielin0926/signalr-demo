@@ -5,19 +5,6 @@
 }
 
 <div class="container">
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5">
-            <input type="text" class="w-100" id="msgInput" placeholder="id, timestamp, ang1j, ang2j, ang3j, ang4j, ang5j, ang6j" />
-        </div>
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Data" />
-        </div>
-    </div>
-    <div class="w-100">
-        <hr />
-    </div>
-
     <h3>Robotic Arm</h3>
     <table>
         <tr>
@@ -68,6 +55,38 @@
             <td>0</td>
             <td>0</td>
             <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+
+    <div class="w-100">
+        <hr />
+    </div>
+
+    <h3>Nyokkey</h3>
+    <table>
+        <tr>
+            <th>Topic</th>
+            <th>Data</th>
+        </tr>
+        <tr id="location">
+            <td>/nyokkey/hmi/location</td>
+            <td>0</td>
+        </tr>
+        <tr id="rightarm">
+            <td>/nyokkey/hmi/rightarm</td>
+            <td>0</td>
+        </tr>
+        <tr id="leftarm">
+            <td>/nyokkey/hmi/leftarm</td>
+            <td>0</td>
+        </tr>
+        <tr id="face">
+            <td>/nyokkey/hmi/face</td>
+            <td>0</td>
+        </tr>
+        <tr id="task">
+            <td>/nyokkey/hmi/task</td>
             <td>0</td>
         </tr>
     </table>
