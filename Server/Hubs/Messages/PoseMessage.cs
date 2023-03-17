@@ -1,8 +1,12 @@
-﻿namespace Server.Hubs.Messages
+﻿using System.Text.Json.Serialization;
+
+namespace Server.Hubs.Messages
 {
     public class PoseMessage
     {
-        public PointMessage? Point { get; set; }
-        public QuaternionMessage? Quaternion { get; set; }
+        [JsonPropertyName("position")]
+        public PointMessage? Position { get; set; }
+        [JsonPropertyName("orientation")]
+        public QuaternionMessage? Orientation { get; set; }
     }
 }
