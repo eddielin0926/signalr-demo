@@ -1,4 +1,5 @@
 {
     "python.formatting.provider": "black",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/ROS/catkin_ws/src"
 }

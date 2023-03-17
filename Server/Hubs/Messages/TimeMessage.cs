@@ -4,9 +4,9 @@ namespace Server.Hubs.Messages
 {
     public class TimeMessage
     {
-        [JsonPropertyName("sec")]
-        public int? Sec { get; set; }
-        [JsonPropertyName("nsec")]
-        public int? Nsec { get; set; }
+        [JsonPropertyName("secs")]
+        public int? Secs { get; set; }
+        [JsonPropertyName("nsecs")]
+        public int? Nsecs { get; set; }
     }
 }
