@@ -4,7 +4,7 @@
 
 ## Environment
 
-- .NET 7.0
+- .NET 6.0
 - Python
 
 ## Start Docker

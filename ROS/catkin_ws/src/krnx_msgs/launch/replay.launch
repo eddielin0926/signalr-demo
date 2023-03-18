@@ -1,5 +1,5 @@
 <launch>
-  <arg name="rate" default="0.25" />
+  <arg name="rate" default="1" />
   <arg name="file" default="/catkin_ws/four_arms_onedrive.bag" />
 
   <node name="listener" pkg="krnx_msgs" type="listener.py" output="screen" />

@@ -1,5 +1,5 @@
 <launch>
-  <arg name="rate" default="0.25" />
+  <arg name="rate" default="1" />
   <arg name="file" default="/catkin_ws/2023-02-27-19-15-26.bag" />
 
   <node name="talker" pkg="rosbag" type="play" output="screen" args="-l -r $(arg rate) $(arg file)"/>

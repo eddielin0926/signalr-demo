@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import sys
-import time
 from datetime import datetime, timedelta
 import requests
 import json
+
+import yaml
 import rospy
 from krnx_msgs.msg import RobotState
 import threading
@@ -38,12 +39,8 @@ class Watcher:
 
 
 class MyTopics(object):
-    def __init__(self, domain_name, hub, ms):
+    def __init__(self, ssl, domain_name, hub, ms):
         self.ms = ms
-        self.count1 = 0
-        self.count2 = 0
-        self.count3 = 0
-        self.count4 = 0
         self.lastDateTime1 = None
         self.lastDateTime2 = None
         self.lastDateTime3 = None
@@ -52,14 +49,16 @@ class MyTopics(object):
         super(MyTopics, self).__init__()
         rospy.init_node("my_topics", anonymous=True)
 
+        s = 's'if ssl else ''
+
         negotiation = requests.post(
-            f"https://{domain_name}/{hub}/negotiate?negotiateVersion=0",
+            f"http{s}://{domain_name}/{hub}/negotiate?negotiateVersion=0",
             verify=False
         ).json()
         connection_id = negotiation["connectionId"]
         rospy.loginfo(f"connection id: {connection_id}")
         self.signalr_ws = create_connection(
-            f"wss://{domain_name}/{hub}?id={connection_id}")
+            f"ws{s}://{domain_name}/{hub}?id={connection_id}")
 
         rospy.loginfo("start ...")
         self.lock = threading.Lock()
@@ -80,10 +79,6 @@ class MyTopics(object):
                 {"protocol": "json", "version": 1}))
             handshake_response = self.signalr_ws.recv()
             rospy.loginfo(f"handshake response: {handshake_response}")
-
-        def ping(data):
-            rospy.loginfo('ping SignalR server')
-            self.signalr_ws.send(self.toSignalRMessage({"type": 6}))
 
         handshake()
         
@@ -108,86 +103,89 @@ class MyTopics(object):
 
     
     def sub_robot1_angles(self):
-        def callback1(data1):
-            # self.count1 = (self.count1 + 1) % self.count
-            
-            
-            dateTime = datetime.fromtimestamp(int(data1.time) / 1000)
+        def callback(data):
+            dateTime = datetime.fromtimestamp(int(data.time) / 1000)
             if self.lastDateTime1 is None or dateTime - self.lastDateTime1 > timedelta(milliseconds=self.ms):
-            #if self.count1 == 0:
-                rospy.loginfo(f"robot1 receive: {data1}")
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [robot1] receive: {y}")
 
-                msg = self._build_message("SendAngles", [data1.id, data1.time, 
-                    data1.joint_1, data1.joint_2, data1.joint_3, data1.joint_4, data1.joint_5, data1.joint_6])
+                msg = self._build_message("SendAngles", [data.id, data.time, 
+                    data.joint_1, data.joint_2, data.joint_3, data.joint_4, data.joint_5, data.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
-                rospy.loginfo(f"robot1 send: {msg}")
+                rospy.loginfo(f"[signalr] [robot1] send: {msg}")
+
                 self.lastDateTime1 = dateTime
                 recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
+                rospy.loginfo(f"[signalr] [robot1] receive: {recv}")
         
-        sub = rospy.Subscriber('robot1', RobotState, callback=callback1)
+        sub = rospy.Subscriber('robot1', RobotState, callback=callback)
         rospy.spin()
                    
     def sub_robot2_angles(self):
-        def callback2(data2):
-            #self.count2 = (self.count2 + 1) % self.count
-            #if self.count2 == 0:
-            dateTime = datetime.fromtimestamp(int(data2.time) / 1000)
+        def callback(data):
+            dateTime = datetime.fromtimestamp(int(data.time) / 1000)
             if self.lastDateTime2 is None or dateTime - self.lastDateTime2 > timedelta(milliseconds=self.ms):
-                rospy.loginfo(f"robot2 receive: {data2}")  
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [robot2] receive: {y}")  
 
-                msg = self._build_message("SendAngles", [data2.id, data2.time, 
-                    data2.joint_1, data2.joint_2, data2.joint_3, data2.joint_4, data2.joint_5, data2.joint_6])
+                msg = self._build_message("SendAngles", [data.id, data.time, 
+                    data.joint_1, data.joint_2, data.joint_3, data.joint_4, data.joint_5, data.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [robot2] send: {msg}")
+
                 self.lastDateTime2 = dateTime
                 recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
+                rospy.loginfo(f"[signalr] [robot2] receive: {recv}")
 
-        sub = rospy.Subscriber('robot2', RobotState, callback=callback2)
+        sub = rospy.Subscriber('robot2', RobotState, callback=callback)
         rospy.spin()
                    
     def sub_robot3_angles(self):
-        def callback3(data3):
-            #self.count3 = (self.count3 + 1) % self.count
-            #if self.count3 == 0:
-            dateTime = datetime.fromtimestamp(int(data3.time) / 1000)
+        def callback(data):
+            dateTime = datetime.fromtimestamp(int(data.time) / 1000)
             if self.lastDateTime3 is None or dateTime - self.lastDateTime3 > timedelta(milliseconds=self.ms):
-                rospy.loginfo(f"robot3 receive: {data3}") 
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [robot3] receive: {y}") 
 
-                msg = self._build_message("SendAngles", [data3.id, data3.time, 
-                    data3.joint_1, data3.joint_2, data3.joint_3, data3.joint_4, data3.joint_5, data3.joint_6])
+                msg = self._build_message("SendAngles", [data.id, data.time, 
+                    data.joint_1, data.joint_2, data.joint_3, data.joint_4, data.joint_5, data.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [robot3] send: {msg}")
+
                 self.lastDateTime3 = dateTime
                 recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
+                rospy.loginfo(f"[signalr] [robot3] receive: {recv}")
 
-        sub = rospy.Subscriber('robot3', RobotState, callback=callback3)
+        sub = rospy.Subscriber('robot3', RobotState, callback=callback)
         rospy.spin()
                    
     def sub_robot4_angles(self):
-        def callback4(data4):
-            #self.count4 = (self.count4 + 1) % self.count
-            #if self.count4 == 0:
-            dateTime = datetime.fromtimestamp(int(data4.time) / 1000)
+        def callback(data):
+            dateTime = datetime.fromtimestamp(int(data.time) / 1000)
             if self.lastDateTime4 is None or dateTime - self.lastDateTime4 > timedelta(milliseconds=self.ms):
-                rospy.loginfo(f"robot4 receive: {data4}") 
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [robot4] receive: {y}") 
 
-                msg = self._build_message("SendAngles", [data4.id, data4.time, 
-                    data4.joint_1, data4.joint_2, data4.joint_3, data4.joint_4, data4.joint_5, data4.joint_6])
+                msg = self._build_message("SendAngles", [data.id, data.time, 
+                    data.joint_1, data.joint_2, data.joint_3, data.joint_4, data.joint_5, data.joint_6])
                 self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [robot4] send: {msg}")
+
                 self.lastDateTime4 = dateTime
                 recv = self.signalr_ws.recv()
-                rospy.loginfo(f"receive signalr: {recv}")
+                rospy.loginfo(f"[signalr] [robot4] receive: {recv}")
 
-        sub = rospy.Subscriber('robot4', RobotState, callback=callback4)
+        sub = rospy.Subscriber('robot4', RobotState, callback=callback)
         rospy.spin()
 
    
 if __name__ == "__main__":
+    ssl = os.getenv('SSL', 'true').lower() in ('true', '1', 't')
     domain_name = os.getenv('DOMAIN_NAME', 'khi-signalr-server.azurewebsites.net')
     hub = os.getenv('HUB', 'robotic-arm-hub')
-    milliseconds = os.getenv('milliseconds', '1000')
+    milliseconds = int(os.getenv('milliseconds', '1000'))
+
     Watcher()
-    topics = MyTopics(domain_name, hub, int(milliseconds))
+    topics = MyTopics(ssl, domain_name, hub, milliseconds)
     topics.start()
     
