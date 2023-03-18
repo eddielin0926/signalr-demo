@@ -41,10 +41,10 @@ class Watcher:
 class MyTopics(object):
     def __init__(self, ssl, domain_name, hub, ms):
         self.ms = ms
-        self.lastDateTime1 = None
-        self.lastDateTime2 = None
-        self.lastDateTime3 = None
-        self.lastDateTime4 = None
+        self.lastDateTime1 = datetime.min
+        self.lastDateTime2 = datetime.min
+        self.lastDateTime3 = datetime.min
+        self.lastDateTime4 = datetime.min
 
         super(MyTopics, self).__init__()
         rospy.init_node("my_topics", anonymous=True)
@@ -105,7 +105,7 @@ class MyTopics(object):
     def sub_robot1_angles(self):
         def callback(data):
             dateTime = datetime.fromtimestamp(int(data.time) / 1000)
-            if self.lastDateTime1 is None or dateTime - self.lastDateTime1 > timedelta(milliseconds=self.ms):
+            if abs(dateTime - self.lastDateTime1) > timedelta(milliseconds=self.ms):
                 y = yaml.safe_load(str(data))
                 rospy.loginfo(f"[ros] [robot1] receive: {y}")
 
@@ -124,7 +124,7 @@ class MyTopics(object):
     def sub_robot2_angles(self):
         def callback(data):
             dateTime = datetime.fromtimestamp(int(data.time) / 1000)
-            if self.lastDateTime2 is None or dateTime - self.lastDateTime2 > timedelta(milliseconds=self.ms):
+            if abs(dateTime - self.lastDateTime2) > timedelta(milliseconds=self.ms):
                 y = yaml.safe_load(str(data))
                 rospy.loginfo(f"[ros] [robot2] receive: {y}")  
 
@@ -143,7 +143,7 @@ class MyTopics(object):
     def sub_robot3_angles(self):
         def callback(data):
             dateTime = datetime.fromtimestamp(int(data.time) / 1000)
-            if self.lastDateTime3 is None or dateTime - self.lastDateTime3 > timedelta(milliseconds=self.ms):
+            if abs(dateTime - self.lastDateTime3) > timedelta(milliseconds=self.ms):
                 y = yaml.safe_load(str(data))
                 rospy.loginfo(f"[ros] [robot3] receive: {y}") 
 
@@ -162,7 +162,7 @@ class MyTopics(object):
     def sub_robot4_angles(self):
         def callback(data):
             dateTime = datetime.fromtimestamp(int(data.time) / 1000)
-            if self.lastDateTime4 is None or dateTime - self.lastDateTime4 > timedelta(milliseconds=self.ms):
+            if abs(dateTime - self.lastDateTime4) > timedelta(milliseconds=self.ms):
                 y = yaml.safe_load(str(data))
                 rospy.loginfo(f"[ros] [robot4] receive: {y}") 
 
