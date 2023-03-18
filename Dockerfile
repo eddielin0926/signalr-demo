@@ -18,8 +18,9 @@ COPY Server /Server
 WORKDIR /Server
 RUN /entrypoint.sh dotnet publish -c Release -o /app /p:UseAppHost=false
 
-EXPOSE 5000
-EXPOSE 5001
+ENV ASPNETCORE_URLS="https://0.0.0.0:7607;http://0.0.0.0:5213;"
+EXPOSE 7607
+EXPOSE 5213
 
 WORKDIR /app
 ENTRYPOINT [ "/entrypoint.sh" ]
