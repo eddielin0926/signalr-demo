@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
         {
             policy.AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowAnyOrigin()
+                  .SetIsOriginAllowed((host) => true)
                   .AllowCredentials();
         });
 });
@@ -19,6 +19,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+app.UseCors("CorsPolicy");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

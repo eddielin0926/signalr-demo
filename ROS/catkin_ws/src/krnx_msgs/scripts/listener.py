@@ -2,9 +2,6 @@
 # -*- coding:utf-8 -*-
 import sys
 from datetime import datetime, timedelta
-import requests
-import json
-
 import yaml
 import rospy
 from krnx_msgs.msg import RobotState
@@ -14,6 +11,12 @@ import signal
 import json
 from websocket import create_connection
 import requests
+from requests.adapters import HTTPAdapter, Retry
+
+session = requests.Session()
+adapter = HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1))
+session.mount("http://", adapter)
+session.mount("https://", adapter)
 
 class Watcher:
     def __init__(self):
@@ -51,7 +54,7 @@ class MyTopics(object):
 
         s = 's'if ssl else ''
 
-        negotiation = requests.post(
+        negotiation = session.post(
             f"http{s}://{domain_name}/{hub}/negotiate?negotiateVersion=0",
             verify=False
         ).json()
