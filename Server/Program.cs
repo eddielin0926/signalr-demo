@@ -16,7 +16,9 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(o => {
+    o.EnableDetailedErrors = true;
+});
 
 var app = builder.Build();
 app.UseCors("CorsPolicy");
