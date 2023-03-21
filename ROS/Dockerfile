@@ -5,7 +5,7 @@ ENV ROS_WS=catkin_ws
 RUN apt-get update && apt-get install -y python3-pip
 RUN pip install websocket-client requests
 
-COPY ./${ROS_WS} /${ROS_WS}
+COPY ROS/${ROS_WS} /${ROS_WS}
 
 WORKDIR ${ROS_WS}
 

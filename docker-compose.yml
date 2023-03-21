@@ -1,0 +1,27 @@
+version: "3"
+services:
+  server:
+    image: signalr-server
+    build:
+      context: .
+      dockerfile: ./Server/Dockerfile
+    ports:
+      - "5213:80"
+  ros-signalr-arm:
+    image: signalr-arm
+    build:
+      context: .
+      dockerfile: ./ROS/Dockerfile
+    command: roslaunch krnx_msgs replay.launch rate:=1
+    environment:
+      SSL: false
+      DOMAIN_NAME: server:80
+  ros-signalr-nyokkey:
+    image: signalr-arm
+    build:
+      context: .
+      dockerfile: ./ROS/Dockerfile
+    command: roslaunch nyokkey replay.launch rate:=1
+    environment:
+      SSL: false
+      DOMAIN_NAME: server:80
