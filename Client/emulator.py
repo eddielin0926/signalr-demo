@@ -71,49 +71,49 @@ async def connectToHub(connectionId):
                 "arguments": [{
                     'arms': [
                         {
-                            'id': "robot1",  # id
-                            'timestamp': str(time.time()),  # timestamp
-                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
-                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
-                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
-                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
-                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
-                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                            "id": "robot1",
+                            "timestamp": "123",
+                            "ang1j": 0.0,
+                            "ang2j": 0.0,
+                            "ang3j": 0.0,
+                            "ang4j": 0.0,
+                            "ang5j": 0.0,
+                            "ang6j": 0.0
                         },
                         {
-                            'id': "robot2",  # id
-                            'timestamp': str(time.time()),  # timestamp
-                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
-                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
-                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
-                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
-                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
-                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                            "id": "robot2",
+                            "timestamp": "123",
+                            "ang1j": 0.0,
+                            "ang2j": 0.0,
+                            "ang3j": 0.0,
+                            "ang4j": 0.0,
+                            "ang5j": 0.0,
+                            "ang6j": 0.0
                         },
                         {
-                            'id': "robot3",  # id
-                            'timestamp': str(time.time()),  # timestamp
-                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
-                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
-                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
-                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
-                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
-                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                            "id": "robot3",
+                            "timestamp": "123",
+                            "ang1j": 0.0,
+                            "ang2j": 0.0,
+                            "ang3j": 0.0,
+                            "ang4j": 0.0,
+                            "ang5j": 0.0,
+                            "ang6j": 0.0
                         },
                         {
-                            'id': "robot4",  # id
-                            'timestamp': str(time.time()),  # timestamp
-                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
-                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
-                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
-                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
-                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
-                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                            "id": "robot4",
+                            "timestamp": "123",
+                            "ang1j": 0.0,
+                            "ang2j": 0.0,
+                            "ang3j": 0.0,
+                            "ang4j": 0.0,
+                            "ang5j": 0.0,
+                            "ang6j": 0.0
                         }
                     ]
                 }],
             }
-            print(message)
+            logging.info(f"send: {message}")
             await websocket.send(toSignalRMessage(message))
             await asyncio.sleep(1)
 
