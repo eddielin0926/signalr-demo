@@ -81,7 +81,27 @@ async def connectToHub(connectionId):
                             'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
                         },
                         {
-                            'id': "robot1",  # id
+                            'id': "robot2",  # id
+                            'timestamp': str(time.time()),  # timestamp
+                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
+                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
+                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
+                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
+                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
+                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                        },
+                        {
+                            'id': "robot3",  # id
+                            'timestamp': str(time.time()),  # timestamp
+                            'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
+                            'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
+                            'ang3j': round(random.uniform(0.0, 100.0), 6),  # ang3j
+                            'ang4j': round(random.uniform(0.0, 100.0), 6),  # ang4j
+                            'ang5j': round(random.uniform(0.0, 100.0), 6),  # ang5j
+                            'ang6j': round(random.uniform(0.0, 100.0), 6),  # ang6j
+                        },
+                        {
+                            'id': "robot4",  # id
                             'timestamp': str(time.time()),  # timestamp
                             'ang1j': round(random.uniform(0.0, 100.0), 6),  # ang1j
                             'ang2j': round(random.uniform(0.0, 100.0), 6),  # ang2j
