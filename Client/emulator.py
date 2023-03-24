@@ -64,56 +64,24 @@ async def connectToHub(connectionId):
         ping_task = asyncio.create_task(ping())
         listen_task = asyncio.create_task(listen())
 
+        t = 0.9;
         while _running:
+            t = t + 0.1
             message = {
                 "type": 1,
-                "target": "SendSingleAngles",
-                "arguments": [{
-                    'arms': [
-                        {
-                            "id": "robot1",
-                            "timestamp": "123",
-                            "ang1j": 0.0,
-                            "ang2j": 0.0,
-                            "ang3j": 0.0,
-                            "ang4j": 0.0,
-                            "ang5j": 0.0,
-                            "ang6j": 0.0
-                        },
-                        {
-                            "id": "robot2",
-                            "timestamp": "123",
-                            "ang1j": 0.0,
-                            "ang2j": 0.0,
-                            "ang3j": 0.0,
-                            "ang4j": 0.0,
-                            "ang5j": 0.0,
-                            "ang6j": 0.0
-                        },
-                        {
-                            "id": "robot3",
-                            "timestamp": "123",
-                            "ang1j": 0.0,
-                            "ang2j": 0.0,
-                            "ang3j": 0.0,
-                            "ang4j": 0.0,
-                            "ang5j": 0.0,
-                            "ang6j": 0.0
-                        },
-                        {
-                            "id": "robot4",
-                            "timestamp": "123",
-                            "ang1j": 0.0,
-                            "ang2j": 0.0,
-                            "ang3j": 0.0,
-                            "ang4j": 0.0,
-                            "ang5j": 0.0,
-                            "ang6j": 0.0
-                        }
-                    ]
-                }],
+                "target": "SendAngles",
+                "arguments": [
+                    "robot1",
+                    str(t),
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
             }
-            logging.info(f"send: {message}")
+            #logging.info(f"send: {message}")
             await websocket.send(toSignalRMessage(message))
             await asyncio.sleep(1)
 

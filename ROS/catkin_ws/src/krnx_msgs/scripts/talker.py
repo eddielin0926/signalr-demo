@@ -3,42 +3,19 @@
 import pandas as pd
 import rospy
 import rosbag
-from beginner_tutorials.msg import Robot
-robot1 = pd.read_csv('/home/tina997726/catkin_robot/src/beginner_tutorials/scripts/robot1_KRNX.csv')
-robot2 = pd.read_csv('/home/tina997726/catkin_robot/src/beginner_tutorials/scripts/robot2_KRNX.csv')
-robot3 = pd.read_csv('/home/tina997726/catkin_robot/src/beginner_tutorials/scripts/robot3_KRNX.csv')
-robot4 = pd.read_csv('/home/tina997726/catkin_robot/src/beginner_tutorials/scripts/robot4_KRNX.csv')
+from krnx_msgs.msg import RobotState
+robot1 = pd.read_csv('/home/tina997726/catkin_robot/src/krnx_msgs/scripts/OneDrive_1_3-12-2023/Unit1_robot1_KRNX_1678425648835.csv')
+robot2 = pd.read_csv('/home/tina997726/catkin_robot/src/krnx_msgs/scripts/OneDrive_1_3-12-2023/Unit2_robot2_KRNX_1678425703964.csv')
+robot3 = pd.read_csv('/home/tina997726/catkin_robot/src/krnx_msgs/scripts/OneDrive_1_3-12-2023/Unit4_robot3_KRNX_1678425804978.csv')
+robot4 = pd.read_csv('/home/tina997726/catkin_robot/src/krnx_msgs/scripts/OneDrive_1_3-12-2023/Unit3_robot4_KRNX_1678425760601.csv')
 rospy.init_node("record_topics")
-# def talker():
-#     pub = rospy.Publisher('chatter', Robot, queue_size=10)
-#     rospy.init_node('talker', anonymous=True)
-#     rate = rospy.Rate(10) # 10hz
-#     while not rospy.is_shutdown():
-#         msg = Robot()
-#         msg.id= "robot1"
-#         msg.time = "11111"
-#         msg.joint_1 = 12.2222
-#         msg.joint_2 = 32.2222
-#         msg.joint_3 = 42.2222
-#         msg.joint_4 = 52.2222
-#         msg.joint_5 = 62.2222
-#         msg.joint_6 = 72.2222
-#         # hello_str = "hello world %s" % rospy.get_time()
-#         rospy.loginfo(msg)
-#         pub.publish(msg)
-#         rate.sleep()
 
-# if __name__ == '__main__':
-#     try:
-#         talker()
-#     except rospy.ROSInterruptException:
-#         pass
-with rosbag.Bag('four_robots.bag', 'w') as bag:
+with rosbag.Bag('four_arms_onedrive.bag', 'w') as bag:
     for row in range(robot1.shape[0]):
-        # rospy.Time.now()
+        # timestamp = rospy.Time.now()
         timestamp = rospy.Time.from_sec(robot1['timestamp'][row]/1000)  
 
-        joints_msg1 = Robot()
+        joints_msg1 = RobotState()
         joints_msg1.id= "robot1"
         joints_msg1.time = str(robot1['timestamp'][row])
         joints_msg1.joint_1 = float(robot1['ang1j'][row])
@@ -47,8 +24,9 @@ with rosbag.Bag('four_robots.bag', 'w') as bag:
         joints_msg1.joint_4 = float(robot1['ang4j'][row])
         joints_msg1.joint_5 = float(robot1['ang5j'][row])
         joints_msg1.joint_6 = float(robot1['ang6j'][row])
+         
 
-        joints_msg2 = Robot()
+        joints_msg2 = RobotState()
         joints_msg2.id= "robot2"
         joints_msg2.time = str(robot1['timestamp'][row])
         joints_msg2.joint_1 = float(robot2['ang1j'][row])
@@ -58,7 +36,7 @@ with rosbag.Bag('four_robots.bag', 'w') as bag:
         joints_msg2.joint_5 = float(robot2['ang5j'][row])
         joints_msg2.joint_6 = float(robot2['ang6j'][row])
 
-        joints_msg3 = Robot()
+        joints_msg3 = RobotState()
         joints_msg3.id= "robot3"
         joints_msg3.time = str(robot1['timestamp'][row])
         joints_msg3.joint_1 = float(robot3['ang1j'][row])
@@ -68,7 +46,7 @@ with rosbag.Bag('four_robots.bag', 'w') as bag:
         joints_msg3.joint_5 = float(robot3['ang5j'][row])
         joints_msg3.joint_6 = float(robot3['ang6j'][row])
 
-        joints_msg4 = Robot()
+        joints_msg4 = RobotState()
         joints_msg4.id= "robot4"
         joints_msg4.time = str(robot1['timestamp'][row])
         joints_msg4.joint_1 = float(robot4['ang1j'][row])
@@ -77,6 +55,7 @@ with rosbag.Bag('four_robots.bag', 'w') as bag:
         joints_msg4.joint_4 = float(robot4['ang4j'][row])
         joints_msg4.joint_5 = float(robot4['ang5j'][row])
         joints_msg4.joint_6 = float(robot4['ang6j'][row])
+
         bag.write("robot3", joints_msg3, timestamp )
         bag.write("robot2", joints_msg2, timestamp )
         bag.write("robot1", joints_msg1, timestamp )
