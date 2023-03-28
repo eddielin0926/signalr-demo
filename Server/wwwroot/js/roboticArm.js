@@ -2,8 +2,17 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/robotic-arm-hub").build();
 
+var startTime = new Date()
+var messageCount = 0;
+
 connection.on("ReceiveMessage", function (message) {
-    console.log(message);
+    messageCount += 1;
+    var deltaTime = new Date() - startTime;
+    var rate = (messageCount * 1000 / deltaTime).toFixed(2);
+    document.getElementById("arm-data").innerHTML = `
+        Recieved ${messageCount} messages (${rate} msg / sec)
+    `;
+
     var t = document.getElementById(message.id);
     t.innerHTML = `
         <tr id="${message.id}">
