@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+from datetime import datetime, timedelta
 import sys
 import requests
 import json
@@ -44,7 +45,15 @@ class Watcher:
 
 
 class MyTopics(object):
-    def __init__(self, ssl, domain_name, hub):
+    def __init__(self, ssl, domain_name, hub, ms):
+        self.ms = ms
+        self.lastTaskDateTime = datetime.min
+        self.lastLocationDateTime = datetime.min
+        self.lastRightArmDateTime = datetime.min
+        self.lastLeftArmDateTime = datetime.min
+        self.lastFaceDateTime = datetime.min
+        self.lastTaskDateTime = datetime.min
+
         super(MyTopics, self).__init__()
         rospy.init_node("nyokkey_topics", anonymous=True)
 
@@ -111,75 +120,90 @@ class MyTopics(object):
    
     def sub_nyokkey_location(self):
         def callback(data):
-            y = yaml.safe_load(str(data))
-            rospy.loginfo(f"[ros] [location] receive: {y}")
+            dateTime = datetime.fromtimestamp(data.header.stamp.secs)
+            if abs(dateTime - self.lastLocationDateTime) > timedelta(milliseconds=self.ms):
+                self.lastLocationDateTime = dateTime
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [location] receive: {y}")
 
-            msg = self._build_message("SendLocation", [y])
-            self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"[signalr] [location] send: {msg}")
+                msg = self._build_message("SendLocation", [y])
+                self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [location] send: {msg}")
 
-            recv = self.signalr_ws.recv()
-            rospy.loginfo(f"[signalr] [location] receive : {recv}")
+                recv = self.signalr_ws.recv()
+                rospy.loginfo(f"[signalr] [location] receive : {recv}")
         
         sub = rospy.Subscriber('/nyokkey/hmi/location', PoseStamped, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_rightarm(self):
         def callback(data):
-            y = yaml.safe_load(str(data))
-            rospy.loginfo(f"[ros] [rightarm] receive: {y}")
+            dateTime = datetime.fromtimestamp(data.header.stamp.secs)
+            if abs(dateTime - self.lastRightArmDateTime) > timedelta(milliseconds=self.ms):
+                self.lastRightArmDateTime = dateTime
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [rightarm] receive: {y}")
 
-            msg = self._build_message("SendRightArm", [y])
-            self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"[signalr] [rightarm] send: {msg}")
+                msg = self._build_message("SendRightArm", [y])
+                self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [rightarm] send: {msg}")
 
-            recv = self.signalr_ws.recv()
-            rospy.loginfo(f"[signalr] [rightarm] receive: {recv}")
+                recv = self.signalr_ws.recv()
+                rospy.loginfo(f"[signalr] [rightarm] receive: {recv}")
 
         sub = rospy.Subscriber('/nyokkey/hmi/rightarm', PoseArray, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_leftarm(self):
         def callback(data):
-            y = yaml.safe_load(str(data))
-            rospy.loginfo(f"[ros] [leftarm] receive: {y}")
+            dateTime = datetime.fromtimestamp(data.header.stamp.secs)
+            if abs(dateTime - self.lastLeftArmDateTime) > timedelta(milliseconds=self.ms):
+                self.lastLeftArmDateTime = dateTime
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [leftarm] receive: {y}")
 
-            msg = self._build_message("SendLeftArm", [y])
-            self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"[signalr] [leftarm] send: {msg}")
+                msg = self._build_message("SendLeftArm", [y])
+                self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [leftarm] send: {msg}")
 
-            recv = self.signalr_ws.recv()
-            rospy.loginfo(f"[signalr] [leftarm] receive: {recv}")
+                recv = self.signalr_ws.recv()
+                rospy.loginfo(f"[signalr] [leftarm] receive: {recv}")
 
         sub = rospy.Subscriber('/nyokkey/hmi/leftarm', PoseArray, callback=callback)
         rospy.spin()
                    
     def sub_nyokkey_face(self):
         def callback(data):
-            y = yaml.safe_load(str(data))
-            rospy.loginfo(f"[ros] [face] receive: {y}")
+            dateTime = datetime.fromtimestamp(data.header.stamp.secs)
+            if abs(dateTime - self.lastFaceDateTime) > timedelta(milliseconds=self.ms):
+                self.lastFaceDateTime = dateTime
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [face] receive: {y}")
 
-            msg = self._build_message("SendFace", [y])
-            self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"[signalr] [face] send: {msg}")
+                msg = self._build_message("SendFace", [y])
+                self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [face] send: {msg}")
 
-            recv = self.signalr_ws.recv()
-            rospy.loginfo(f"[signalr] [face] receive: {recv}")
+                recv = self.signalr_ws.recv()
+                rospy.loginfo(f"[signalr] [face] receive: {recv}")
 
         sub = rospy.Subscriber('/nyokkey/hmi/face', PoseArray, callback=callback)
         rospy.spin()
 
     def sub_nyokkey_task(self):
         def callback(data):
-            y = yaml.safe_load(str(data))
-            rospy.loginfo(f"[ros] [task] receive: {y}")
+            dateTime = datetime.now()
+            if abs(dateTime - self.lastTaskDateTime) > datetime.timedelta(milliseconds=self.ms):
+                self.lastTaskDateTime = dateTime
+                y = yaml.safe_load(str(data))
+                rospy.loginfo(f"[ros] [task] receive: {y}")
 
-            msg = self._build_message("SendTask", [y])
-            self.signalr_ws.send(self.toSignalRMessage(msg))
-            rospy.loginfo(f"[signalr] [task] send: {msg}")
+                msg = self._build_message("SendTask", [y])
+                self.signalr_ws.send(self.toSignalRMessage(msg))
+                rospy.loginfo(f"[signalr] [task] send: {msg}")
 
-            recv = self.signalr_ws.recv()
-            rospy.loginfo(f"[signalr] [task] receive: {recv}")
+                recv = self.signalr_ws.recv()
+                rospy.loginfo(f"[signalr] [task] receive: {recv}")
 
         sub = rospy.Subscriber('/nyokkey/hmi/task', String, callback=callback)
         rospy.spin()
@@ -189,7 +213,8 @@ if __name__ == "__main__":
     ssl = os.getenv('SSL', 'true').lower() in ('true', '1', 't')
     domain_name = os.getenv('DOMAIN_NAME', 'khi-signalr-server.azurewebsites.net')
     hub = os.getenv('HUB', 'nyokkey')
+    milliseconds = int(os.getenv('milliseconds', '1000'))
 
     Watcher()
-    topics = MyTopics(ssl, domain_name, hub)
+    topics = MyTopics(ssl, domain_name, hub, milliseconds)
     topics.start()
